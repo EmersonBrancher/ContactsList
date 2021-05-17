@@ -32,7 +32,7 @@ class ContactHelper{
   Future<Database> initDb() async {
 
     final databasesPath = await getDatabasesPath();
-    final path = join(databasesPath, "contacts.db");
+    final path = join(databasesPath, "contact_list.db");
 
     return await openDatabase(path, version: 1, onCreate: (Database db, int newerVersion) async{
       await db.execute(
@@ -78,7 +78,7 @@ class ContactHelper{
 
   Future<List> getAllContacts() async {
     Database dbContact = await db;
-    List ListMap = dbContact.rawQuery("SELECT * FROM $contactTable");
+    List listMap = await dbContact.rawQuery("SELECT * FROM $contactTable");
     List<Contact> listContact = List();
     for (Map m in listMap){
       listContact.add(Contact.fromMap(m));
@@ -105,6 +105,8 @@ class Contact {
   String email;
   String phone;
   String img;
+
+  Contact();
 
   Contact.fromMap(Map map){
 
