@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:contacts_list/helpers/contact_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'contact_page.dart';
 
@@ -22,17 +23,13 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-
     /*Contact c = Contact();
     c.name = "Kleber Brancher";
     c.email = "kleber.brancher@teste.com";
     c.phone = "(XX) 54321-1234";
     c.img = "Imagem Aqui também";
-
     helper.saveContact(c);*/
-
     _getAllContacts();
-
   }
 
   @override
@@ -107,7 +104,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void _showOptions (BuildContext context, int index){
+   void _showOptions (BuildContext context, int index){
     showModalBottomSheet(
         context: context,
         builder: (context){
@@ -122,7 +119,8 @@ class _HomePageState extends State<HomePage> {
                       Padding(
                         padding: EdgeInsets.all(10.0),
                         child: FlatButton(onPressed: () {
-
+                          launch("tel:${contacts[index].phone}");
+                          Navigator.pop(context);
                         },
                           child: Text("Ligar", style: TextStyle(color: Colors.red, fontSize: 20.0),
                           ),
@@ -164,31 +162,22 @@ class _HomePageState extends State<HomePage> {
     final recContact = await Navigator.push(context,
     MaterialPageRoute(builder: (context) => ContactPage(contact: contact,))
     );
-
     if (recContact != null) {
       if(contact != null){
-
         await helper.updateContact(recContact);
-
       } else {
         await helper.saveContact(recContact);
       }
-
       _getAllContacts();
-
     }
-    
   }
 
   void _getAllContacts(){
-
     helper.getAllContacts().then((list){
       // print(list);
       setState(() {
         contacts = list;
       });
     });
-
   }
-  
 }
